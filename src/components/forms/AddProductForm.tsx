@@ -1,14 +1,18 @@
+"use client";
+
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useActionState } from "react";
+import { scrapProduct } from "@/app/actions/scrap";
 
 export default function AddProductForm() {
-  const data = "";
+  const [state, action] = useActionState(scrapProduct, null);
   return (
     <Card className="shadow-sm shadow-black">
       <CardContent className="place-items-center">
-        <form className="flex flex-col gap-6 w-full">
+        <form className="flex flex-col gap-6 w-full" action={action}>
           <section className="flex flex-col gap-2">
             <section className="flex justify-between items-end">
               <section>
@@ -16,15 +20,15 @@ export default function AddProductForm() {
                   <Label className="font-bold">Url:</Label>
                 </div>
                 <div>
-                  <Input placeholder="https://www.amazon.com/..." type="url" />
+                  <Input placeholder="https://www.amazon.com/..." type="url" name="url"/>
                 </div>
               </section>
               <div>
-                <Button>Pesquisar</Button>
+                <Button type="submit">Pesquisar</Button>
               </div>
             </section>
           </section>
-          {!data && (
+          {state?.data && (
             <section className="shadow-sm shadow-black rounded-lg p-4 flex flex-col gap-2">
               <section className="p-4 shadow-sm shadow-black rounded-lg flex flex-col gap-4 items-center">
                 <section className="p-2 shadow-sm shadow-black rounded-lg">
