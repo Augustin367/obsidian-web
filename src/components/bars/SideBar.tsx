@@ -10,7 +10,7 @@ export default function SideBar() {
           <Link href={"/admin"}>
             <Button
               variant={"outline"}
-              className="shadow-black shadow-sm border-none"
+              className="shadow-black shadow-sm border-none cursor-pointer"
             >
               <Shield />
             </Button>
@@ -20,7 +20,7 @@ export default function SideBar() {
           <Link href={"/admin/add"}>
             <Button
               variant={"outline"}
-              className="shadow-black shadow-sm border-none"
+              className="shadow-black shadow-sm border-none cursor-pointer"
             >
               <CirclePlus />
             </Button>

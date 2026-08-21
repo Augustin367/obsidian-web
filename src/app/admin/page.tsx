@@ -1,5 +1,5 @@
-import ProductsCard from "../../components/cards/ProductsCard";
 import UsersCard from "@/components/cards/UsersCard";
+import ProductsCard from "./components/ProductsCard";
 
 export default function AdminPage() {
   return (

@@ -1,39 +1,51 @@
 "use server";
 
 import { scrapSchema } from "@/lib/schemas/scrap";
-
-type State =
-  | { data: any; error?: undefined }
-  | { error: string; data?: undefined }
-  | null;
+import { ScrapedProductSchema } from "@/lib/schemas/scrapedProduct.schema";
+import { State } from "@/lib/types/actions";
 
 export async function scrapProduct(
-  prevState: State,
-  formData: FormData
+  _prevState: State,
+  formData: FormData,
 ): Promise<State> {
   const url = formData.get("url");
 
-  const parsed = scrapSchema.safeParse({ url });
+  const parsed = scrapSchema.safeParse({
+    url: typeof url === "string" ? url : "",
+  });
 
   if (!parsed.success) {
     return { error: "URL inválida" };
   }
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_KEY}/products/scrap`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
-      }
-    );
+    const res = await fetch(`${process.env.API_URL}/products/scrap`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: parsed.data.url }),
+    });
 
-    const data = await res.json();
+    if (!res.ok) {
+      const error = await res.text();
 
-    return { data };
+      console.error(error);
+
+      return {
+        error: error || "Erro ao buscar produto",
+      };
+    }
+
+    const rawData = await res.json();
+
+    const parsedData = ScrapedProductSchema.safeParse(rawData);
+
+    if (!parsedData.success) {
+      return { error: "Dados inválidos retornados pela API" };
+    }
+
+    return { data: parsedData.data };
   } catch (err) {
     return { error: "Erro ao buscar produto" };
   }

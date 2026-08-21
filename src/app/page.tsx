@@ -1,19 +1,24 @@
-export default function Home() {
-  return (
-    <main className="p-4">
-      <section>
-        <section>
-          <div>
-            <h1 className="font-bold">Obsidian Store</h1>
-          </div>
-        </section>
+import ProductsCard from "@/components/cards/ProductsCard";
+import getProducts from "./queries/getProducts";
+import { Input } from "@/components/ui/input";
 
-        <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div>
-            <h2>Home</h2>
-          </div>
-        </section>
-      </section>
+export default async function Home() {
+  const products = await getProducts();
+  return (
+    <main className="p-4 flex flex-col gap-4">
+      <div className="place-items-center">
+        <h1 className="text-2xl font-bold border-b border-black w-fit cursor-default">
+          Melhores Avaliados
+        </h1>
+      </div>
+      <h3 className="font-bold border-b border-black w-fit cursor-pointer">
+        Para Voçê:
+      </h3>
+      <div className="grid grid-cols-4 gap-6">
+        {products.map((product) => (
+          <ProductsCard key={product.id} product={product} />
+        ))}
+      </div>
     </main>
   );
 }

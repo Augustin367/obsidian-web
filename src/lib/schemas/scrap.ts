@@ -1,5 +1,9 @@
+// Front
+
 import z from "zod";
 
 export const scrapSchema = z.object({
-  url: z.url().min(6).optional(),
+  url: z.string().url("URL inválida"),
 });
+
+export type ScrapType = z.infer<typeof scrapSchema>;
